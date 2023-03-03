@@ -22,11 +22,11 @@ def to_excel(df):
     processed_data = output.getvalue()
     return processed_data
 
-mariadb_conexion = mysql.connector.connect(host='127.0.0.1', port='3306',user='root', password='Tunja2021', database='casablanca')
+mariadb_conexion = mysql.connector.connect(host='192.168.20.40', port='3306',user='root', password='Tunja2021', database='casablanca')
 cursor = mariadb_conexion.cursor()
 now = datetime.now()
 
-st.title("REGISTROS CASABLANCA MUEBLES") 
+st.title("REGISTROS CASABLANCA MUEBLES TUNJA") 
 
 st.write("Ingrese gasto nuevo")
 lista_tipos = ["Muebles","Casa","Tapiceria"]
