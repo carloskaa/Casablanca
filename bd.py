@@ -22,7 +22,7 @@ def to_excel(df):
     processed_data = output.getvalue()
     return processed_data
 
-mariadb_conexion = mariadb.connect(host='localhost', port='3306',user='root', password='Tunja2021', database='casablanca')
+mariadb_conexion = mariadb.connect(host='127.0.0.1', port='3306',user='root', password='Tunja2021', database='casablanca')
 cursor = mariadb_conexion.cursor()
 now = datetime.now()
 
