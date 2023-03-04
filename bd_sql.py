@@ -4,7 +4,7 @@ Created on Thu Mar  2 22:44:16 2023
 
 @author: Carlos Camilo Caro
 """
-
+import mysql.connector
 from datetime import datetime
 import streamlit as st
 import pandas as pd
@@ -22,14 +22,16 @@ def to_excel(df):
     processed_data = output.getvalue()
     return processed_data
 
+mariadb_conexion = mysql.connector.connect(host='192.168.20.40', port='3306',user='root', password='Tunja2021', database='casablanca')
+cursor = mariadb_conexion.cursor()
 now = datetime.now()
+
 st.title("REGISTROS CASABLANCA MUEBLES TUNJA") 
 
 st.write("Ingrese gasto nuevo")
 lista_tipos = ["Muebles","Casa","Tapiceria"]
 lista_tipos.insert(0, "-")
 if st.checkbox("Agregar gasto"):
-    df = pd.read_excel('df.xlsx')
     col1, col2, col3= st.columns(3)
     with col1:
         gasto = st.text_input('Gasto',"-")
@@ -42,15 +44,31 @@ if st.checkbox("Agregar gasto"):
         if tipo == "-" or gasto == "-" or costo == "-":
             st.error('Por favor ingrese datos')
         else:
-            df = df.append({'Gasto':gasto, 'Costo':float(costo), 'Tipo':tipo, 'fecha':now}, ignore_index=True)
-            df.to_excel("df.xlsx",index=False)
+            sql = "INSERT INTO registros_gastos (Gasto,Costo,Tipo,fecha) VALUES (%s, %s, %s,%s)"
+            val = (gasto, costo,tipo,now)
+            cursor.execute(sql, val)
+            mariadb_conexion.commit()
+            print(cursor.rowcount, "registro insertado")
+            print("registro insertado")
             st.success('Registro insertado')
 
 if st.checkbox("Ver tabla"):
-    df = pd.read_excel('df.xlsx')
-    df.loc[:, 'Precio'] ='$'+ df['Costo'].map('{:,.0f}'.format)
-    dff =df[['Gasto', 'Precio', 'Tipo', 'fecha']]
-    st.dataframe(dff)
+    df = pd.read_sql_query("SELECT * FROM registros_gastos", mariadb_conexion)
+    st.dataframe(df)
     st.download_button(label='📥 Descargar DATAFRAME GENERADO', data=to_excel(df) ,file_name= "df.xlsx")
     
+mariadb_conexion.close()
 
+# cursor1=conexion1.cursor()
+# cursor.execute("select * from registros_gastos")
+# for fila in cursor:
+#     print(fila)
+# conexion.close()
+
+# try:
+#     cursor.execute("SELECT ID,USERNAME,PASSWORD,NOMBRE FROM Usuarios")
+#     for id_usuario, username, password, nombre in cursor:
+#         print("id: " + str(id_usuario))
+#         print("username: " + username)
+#         print("password: " + password)
+#         print("nombre: " + nombre)
