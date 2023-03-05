@@ -7,3 +7,4 @@ XlsxWriter==3.0.1
 gspread==5.7.2
 google-auth-httplib2==0.1.0
 google-api-python-client==2.42.0
+streamlit_option_menu==0.3.2
