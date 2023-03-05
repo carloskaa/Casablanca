@@ -9,6 +9,7 @@ from datetime import datetime
 import streamlit as st
 import pandas as pd
 from io import BytesIO
+from Clases import Conexion_google_sheets
 
 def to_excel(df):
     output = BytesIO()
@@ -22,14 +23,16 @@ def to_excel(df):
     processed_data = output.getvalue()
     return processed_data
 
-now = datetime.now()
-st.title("REGISTROS CASABLANCA MUEBLES TUNJA") 
+st.title("REGISTROS CASABLANCA MUEBLES TUNJA BOYACA") 
+connection = Conexion_google_sheets()
+
 
 st.write("Ingrese gasto nuevo")
 lista_tipos = ["Muebles","Casa","Tapiceria"]
 lista_tipos.insert(0, "-")
 if st.checkbox("Agregar gasto"):
-    df = pd.read_excel('df.xlsx')
+    lista= connection.conexion_sheets('1Zf73U-ERuCjlRe13_APyY7sCjzXzZX6kVaXJfU51gdI','gastos')
+    now = datetime.now()
     col1, col2, col3= st.columns(3)
     with col1:
         gasto = st.text_input('Gasto',"-")
@@ -42,15 +45,20 @@ if st.checkbox("Agregar gasto"):
         if tipo == "-" or gasto == "-" or costo == "-":
             st.error('Por favor ingrese datos')
         else:
-            df = df.append({'Gasto':gasto, 'Costo':float(costo), 'Tipo':tipo, 'fecha':now}, ignore_index=True)
-            df.to_excel("df.xlsx",index=False)
+            gs = lista[1]
+            df = pd.DataFrame({'Gasto': [gasto], 'Costo':[float(costo)],  'Tipo': [tipo],'fecha':[now.strftime("%m/%d/%Y, %H:%M:%S")]})
+            gs.values_append('gastos', {'valueInputOption': 'RAW'}, {'values': df.values.tolist()})
             st.success('Registro insertado')
 
 if st.checkbox("Ver tabla"):
-    df = pd.read_excel('df.xlsx')
-    df.loc[:, 'Precio'] ='$'+ df['Costo'].map('{:,.0f}'.format)
-    dff =df[['Gasto', 'Precio', 'Tipo', 'fecha']]
+    lista = connection.conexion_sheets('1Zf73U-ERuCjlRe13_APyY7sCjzXzZX6kVaXJfU51gdI','gastos')
+    list_gastos = lista[0]  
+    df_gastos = pd.DataFrame(list_gastos[1:], columns= list_gastos[0], index = None)
+    df_gastos['Costo'] = pd.to_numeric(df_gastos['Costo'], downcast="integer")
+    df_gastos['fecha'] = pd.to_datetime(df_gastos['fecha'])
+    df_gastos.loc[:, 'Precio'] ='$'+ df_gastos['Costo'].map('{:,.0f}'.format)
+    dff =df_gastos[['Gasto', 'Precio', 'Tipo', 'fecha']]
     st.dataframe(dff)
-    st.download_button(label='📥 Descargar DATAFRAME GENERADO', data=to_excel(df) ,file_name= "df.xlsx")
+    st.download_button(label='📥 Descargar DATAFRAME GENERADO', data=to_excel(df_gastos) ,file_name= "df_gastos.xlsx")
     
 

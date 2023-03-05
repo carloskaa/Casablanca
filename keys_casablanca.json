@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "casablanca-streamlit",
+  "private_key_id": "c01cd89d2fe201089642aaf132f09c558035b0ca",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCd0Ic7EmLmlPmS\nCTpW2CK2KKxXa1uqqmDofZba6wqRFQvWCB8fUCxbOrkOfQf+z1JoVLyf+sQ4Z8KE\newmzgK4zqruLdizveZSxUYs6T0719X6eeKkYFfgJoL84RUXv2kEWukDhySckhPd0\ndt82H7XuOMz4v65Uqdw+gkhSd8YEvqIOKSiyW3fz1GQPD9B6ewzivM19x1qC6FHt\nvIBV1Fgp+y8Zk4ukMQhOidFu/bb0QY8aR+NCbpqPS/sY70Y2JSxJ62UfTrS5Ed2N\nSXgwo3gc80IKRSfc4Nav0llF0Od9kkDxPpLtLvFkddUc1pxUsCpBRxl5xrEdMKWL\n6SihBlBNAgMBAAECggEAASuvQIvszCw4KJIpz1Y/9fP1SQgm+8eJxMaWSgdvdMYN\n6EeJtv3kQcT8vrhW/9fiJVKMvDg1RUVFe7AY0VNXwJvKnKQVDz/86s6qwieLBfl6\n7tNul/ZuU+CG873DPJ5ijzfiwwoBF5z448z9XXWPC3968Au4hudkO0edjgJ63kVF\n48Iy0gtgulYnU7zRXR/CT95ZyrO2muf+KZ+NOuHxRdikIy6+sxCf4URbB5/l54FM\nqt50dtmfn+P92/kTV1y4p4fPbuYN8lAkvBwRKnVLoo/8sx9noDp9pce6aZlv5y2n\n/SdwKwjsFHACa9jyOfjBiP+3OSGKfurCLZMVLwCOoQKBgQDbu7g48U6A2BJpasRz\nnjF+T3UNdAqA+EnfqYWAsTJ0SB2DqVP8V8hJhtIbKNjVBGfS0nTGqi7IdE0P7C54\npqyTKwxiOiCuZC7IHAu3ymv3rrOKWb83zbtkjmqgMRaYHUGDEsBHwPsoWbZc+y42\nBpkMEV1FPpNljpuwdYhUQrfgiQKBgQC33JaL38oh6bfs229rLzLo0avU2Szthtf1\nlzDoPohhn7X1QSR28xf6yzRbyRQNzt5iS3JEwZQNMHzBhG2Cx3uZNrMFrnVFjhaD\nqwuUfZhr0V9TWmha7NsvowzlmAEPfBSydY0rZzVhQ5K1N25I7ymB6vKqCLJAG1l6\nNzDPqNfYpQKBgBJ2xLUsOb+D6JApI5bfjSMjBB/8R0GtG3AK66fzu9yfjrNYkDEd\nIzxictdLaGUF+L9zZdKnzESV2T/kRcdnogq/zEuYvNRKoM+545YvEUF/0aBniDTl\nOcDqYrVRSqe/lZixA61D3xb16ugHR0vM5CFqeB7wcixPfm+mgK0r6g2ZAoGBALJP\nRdllMZzuEyesMEQcxByyqxiDfmTlLy/Ibu/tJUq4Hzk48epCG3Fn/OE/AynZBCcD\n0FAKBFE+Qt9SVPpOB/ow6DGMXcMU55TOHy7lFxsJNI+b0DTOHEv4rxtC7VRdG51v\nD3eWYlhvtin1Fgm5l+GdP7XTNTuiyoYSXE4oCxzZAoGATM/R0/SjUb3bIa9Q7LPc\nfvLu6HceqP+tbuO6agzoTyjc3ODVSmopRfiJ7LqlCP2OkuQz9q/kW0Cj3nYokR/P\nkBE/pJUDX6fYTSx7Ec71l5BEDp0JBQXDu1sTqAZwZt0YCgKUJCjVz7NAq5Rz1DLx\nhVFy6tY6LljztiHBrSFYJu0=\n-----END PRIVATE KEY-----\n",
+  "client_email": "casablanca-python@casablanca-streamlit.iam.gserviceaccount.com",
+  "client_id": "102400217461687326881",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/casablanca-python%40casablanca-streamlit.iam.gserviceaccount.com"
+}
