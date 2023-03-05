@@ -15,8 +15,8 @@ from PIL import Image
 
 st.set_page_config(page_title="Casablanca",page_icon=Image.open("Logo.ico"))
 
-with open('style.css') as f:
-    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+# with open('style.css') as f:
+#     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 def to_excel(df):
     output = BytesIO()
