@@ -24,15 +24,14 @@ def to_excel(df):
     return processed_data
 
 st.title("REGISTROS CASABLANCA MUEBLES TUNJA BOYACA") 
-connection = Conexion_google_sheets()
+
 
 
 st.write("Ingrese gasto nuevo")
 lista_tipos = ["Muebles","Casa","Tapiceria"]
 lista_tipos.insert(0, "-")
 if st.checkbox("Agregar gasto"):
-    lista= connection.conexion_sheets('1Zf73U-ERuCjlRe13_APyY7sCjzXzZX6kVaXJfU51gdI','gastos')
-    now = datetime.now()
+    
     col1, col2, col3= st.columns(3)
     with col1:
         gasto = st.text_input('Gasto',"-")
@@ -45,12 +44,16 @@ if st.checkbox("Agregar gasto"):
         if tipo == "-" or gasto == "-" or costo == "-":
             st.error('Por favor ingrese datos')
         else:
+            connection = Conexion_google_sheets()
+            lista= connection.conexion_sheets('1Zf73U-ERuCjlRe13_APyY7sCjzXzZX6kVaXJfU51gdI','gastos')
+            now = datetime.now()
             gs = lista[1]
             df = pd.DataFrame({'Gasto': [gasto], 'Costo':[float(costo)],  'Tipo': [tipo],'fecha':[now.strftime("%m/%d/%Y, %H:%M:%S")]})
             gs.values_append('gastos', {'valueInputOption': 'RAW'}, {'values': df.values.tolist()})
             st.success('Registro insertado')
 
 if st.checkbox("Ver tabla"):
+    connection = Conexion_google_sheets()
     lista = connection.conexion_sheets('1Zf73U-ERuCjlRe13_APyY7sCjzXzZX6kVaXJfU51gdI','gastos')
     list_gastos = lista[0]  
     df_gastos = pd.DataFrame(list_gastos[1:], columns= list_gastos[0], index = None)
