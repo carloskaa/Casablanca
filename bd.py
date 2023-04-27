@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+    # -*- coding: utf-8 -*-
 """
 Created on Thu Mar  2 22:44:16 2023
 
@@ -13,11 +13,11 @@ from io import BytesIO
 from Clases import Conexion_google_sheets
 from PIL import Image
 import plotly.express as px
-import plotly.graph_objs as go
-st.set_page_config(page_title="Casablanca",page_icon=Image.open("Logo.ico"))
+import plotly.graph_objects as go
 
-# with open('style.css') as f:
-#     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+st.set_page_config(page_title="Casablanca",page_icon=Image.open("Logo.ico"),layout="centered")
+st.markdown("<h1 style='color: black; text-align: center;'>REGISTROS CASABLANCA MUEBLES</h1>", unsafe_allow_html=True)
+
 
 def to_excel(df):
     output = BytesIO()
@@ -53,7 +53,21 @@ def streamlit_menu():
 selected = streamlit_menu()
 
 if selected == "Home":
-    st.title("REGISTROS CASABLANCA MUEBLES")
+    st.markdown(
+    """
+    <style>
+    .reportview-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .css-1aumxhk {
+        max-width: 80%;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+    )
     a1, a2, a3 = st.columns(3)
     b1, b2, b3 = st.columns(3)
     connection = Conexion_google_sheets()
@@ -79,34 +93,92 @@ if selected == "Home":
     b2.metric("Mes",'$'+'{:,}'.format(df_ingreso.groupby(df_ingreso['fecha'].dt.month)['Costo'].sum()[now.month]), "0%")
     b3.metric("Dia",'$'+'{:,}'.format(df_ingreso['Costo'][df_ingreso['fecha'].dt.strftime('%d-%m-%Y')== now.strftime("%d-%m-%Y")].sum()), "0%")
     
-    
-    # df['Precio'] = pd.to_numeric(df['Precio'].str.replace('[^\d.]', ''))
-    gastostipo = pd.pivot_table(df_gastos, values='Costo', columns=['Tipo'], aggfunc=sum)
-    gastospago = pd.pivot_table(df_gastos, values='Costo', columns=['pago'], aggfunc=sum)
-    
-    # fig = go.Figure(data=[go.Table(
-    # header=dict(values=list(gastostipo.columns),
-    #             fill_color='paleturquoise',
-    #             align='left'),
-    # cells=dict(values=[gastostipo['Casa']],
-    #            fill_color='lavender',
-    #            align='left'))])
 
-    # st.plotly_chart(fig)
+# chart = alt.Chart(gastostipo).mark_bar().encode(
+#     x=alt.X('Tipo', title='Tipo de gasto'),
+#     y=alt.Y('Costo', title='Gastos totales por tipo'),
+#     color=alt.Color('Tipo', scale=alt.Scale(scheme='tableau10')),
+#     tooltip=['Tipo', 'Costo'])
+# st.altair_chart(chart2, use_container_width=True)  
     
-    # fig = go.Figure(data=[go.Table(
-    # header=dict(values=list(gastospago.columns),
-    #             fill_color='paleturquoise',
-    #             align='left'),
-    # cells=dict(values=[gastospago['Casa']],
-    #            fill_color='lavender',
-    #            align='left'))])
 
-    # st.plotly_chart(fig)
+    option = st.selectbox('GRAFICOS DE GASTOS',('FORMA EN QUE SE REALIZO EL GASTO', 'TIPO DE GASTO'))
+    if option == 'FORMA EN QUE SE REALIZO EL GASTO':
+        gastospago = pd.pivot_table(df_gastos, values='Costo', columns=['pago'], aggfunc=sum)
+        gastospago = gastospago.transpose()
+        gastospago = gastospago.reset_index()
+        fig = px.bar(gastospago, x='pago', y='Costo', color='pago')
+        fig.update_layout(title="Gastos acumulados por tipo", title_x=0.5, height=600, width=800)
+        st.plotly_chart(fig)
+
+    elif option ==  'TIPO DE GASTO':
+        gastostipo = pd.pivot_table(df_gastos, values='Costo', columns=['Tipo'], aggfunc=sum)
+        gastostipo = gastostipo.transpose()
+        gastostipo = gastostipo.reset_index()
+        fig = px.bar(gastostipo, x='Tipo', y='Costo', color='Tipo')
+        fig.update_layout(title="Gastos acumulados por tipo de pago", title_x=0.5, height=600, width=800)
+        st.plotly_chart(fig)
+
+    option2 = st.selectbox('GRAFICOS DE INGRESOS',('FORMA EN QUE SE REALIZO EL INGRESO', 'TIPO DE INGRESO'))
+    if option2 == 'FORMA EN QUE SE REALIZO EL INGRESO':
+        ingresotipo = pd.pivot_table(df_ingreso, values='Costo', columns=["Medio"], aggfunc=sum)
+        ingresotipo = ingresotipo.transpose()
+        ingresotipo = ingresotipo.reset_index()
+        fig = px.bar(ingresotipo, x='Medio', y='Costo', color='Medio')
+        fig.update_layout(title="Ingresos acumulados por tipo de pago", title_x=0.5, height=600, width=800)
+        st.plotly_chart(fig)
+    elif option2 =='TIPO DE INGRESO':
+        ingresopago = pd.pivot_table(df_ingreso, values='Costo', columns=["Persona"], aggfunc=sum)
+        ingresopago = ingresopago.transpose()
+        ingresopago = ingresopago.reset_index()
+        fig = px.bar(ingresopago, x='Persona', y='Costo', color='Persona')
+        fig.update_layout(title="Ingresos acumulados por tipo de pago", title_x=0.5, height=600, width=800)
+        st.plotly_chart(fig)
     
-    
-    
-    
+    lin_gastos = pd.pivot_table(df_gastos, values='Costo', columns=['fecha'], aggfunc=sum)
+    lin_gastos  = lin_gastos.transpose()
+    lin_gastos  = lin_gastos.reset_index()
+    lin_ingresos = pd.pivot_table(df_ingreso, values='Costo', columns=['fecha'], aggfunc=sum)
+    lin_ingresos = lin_ingresos.transpose()
+    lin_ingresos = lin_ingresos.reset_index()
+
+    lin_gastos = lin_gastos.sort_values('fecha')
+    lin_gastos = lin_gastos.rename(columns={'Costo': 'gasto'})
+
+    lin_ingresos = lin_ingresos.sort_values('fecha')
+    lin_ingresos= lin_ingresos.rename(columns={'Costo': 'ingreso'})
+
+    df_linea = pd.DataFrame({'fecha': pd.date_range(start='2023-01-01', end='2023-12-31', freq='D')})
+    df_linea2 = pd.DataFrame({'fecha': pd.date_range(start='2023-01-01', end='2023-12-31', freq='D')})
+    lin_gastos['fecha'] = pd.to_datetime(lin_gastos['fecha']).dt.date
+    lin_gastos['fecha'] = pd.to_datetime(lin_gastos['fecha'])
+    df_linea  = pd.merge(df_linea , lin_gastos, on='fecha', how='left')
+    df_linea['gasto'] = df_linea['gasto'].fillna(0)
+    df_linea['gastos_acumulados'] = df_linea['gasto'].cumsum()
+    df_linea['gastos_acumulados'] = df_linea['gastos_acumulados'].fillna(0)
+
+    lin_ingresos['fecha'] = pd.to_datetime(lin_ingresos['fecha']).dt.date
+    lin_ingresos['fecha'] = pd.to_datetime(lin_ingresos['fecha'])
+    df_linea2  = pd.merge(df_linea2 , lin_ingresos, on='fecha', how='left')
+    df_linea2['ingreso'] = df_linea2['ingreso'].fillna(0)
+    df_linea2['ingresos_acumulados'] = df_linea2['ingreso'].cumsum()
+    df_linea2['ingresos_acumulados'] = df_linea2['ingresos_acumulados'].fillna(0)
+
+    df_linea  = pd.merge(df_linea , df_linea2, on='fecha', how='left')
+
+    fecha_minima = df_linea['fecha'].min().date()
+    fecha_maxima = df_linea['fecha'].max().date()
+    fecha_minima2 = df_linea['fecha'][(df_linea['ingresos_acumulados']!=0)|(df_linea['gastos_acumulados']!=0)].min().date()
+    fecha_maxima2 = df_linea['fecha'][-(df_linea['ingreso']==0)&(df_linea['gasto']==0)].max().date()
+    fecha_seleccionada = st.slider('Selecciona un rango de fechas', fecha_minima, fecha_maxima, (fecha_minima2, fecha_maxima2))
+    df_linea = df_linea[(df_linea['fecha'].dt.date >= fecha_seleccionada[0]) & (df_linea['fecha'].dt.date <= fecha_seleccionada[1])]
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=df_linea['fecha'], y=df_linea['ingresos_acumulados'], name='ingresos_acumulados'))
+    fig.add_trace(go.Scatter(x=df_linea['fecha'], y=df_linea['gastos_acumulados'], name='gastos_acumulados'))
+    fig.add_trace(go.Bar(x=df_linea['fecha'], y=df_linea['ingreso'], name='ingreso'))
+    fig.add_trace(go.Bar(x=df_linea['fecha'], y=df_linea['gasto'], name='gasto'))
+    st.plotly_chart(fig)
+
 if selected == "Gastos":
     st.write("Ingrese gasto nuevo")
     lista_tipos = ["Muebles","Casa","Tapiceria"]
@@ -151,7 +223,7 @@ if selected == "Gastos":
         st.download_button(label='📥 Descargar DATAFRAME GENERADO', data=to_excel(df_gastos) ,file_name= "df_gastos.xlsx")
         
 if selected == "Ingresos":
-    st.write("Ingrese ingreso de dinero nuevo")
+    st.write("Ingrese de dinero nuevo")
     lista_persona = ["Carlos","Henry A","Marlenciaga","Davidcito"]
     lista_persona.insert(0, "-")
     lista_medios = ["Efectivo","Consignacion Bancolombia","Consignacion Davivienda"]
